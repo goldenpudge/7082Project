@@ -1,0 +1,17 @@
+[
+  {"course_symbol":"AAPL","yahoo_symbol":"AAPL","name":"Apple Inc.","market":"US"},
+  {"course_symbol":"NVDA","yahoo_symbol":"NVDA","name":"NVIDIA Corp.","market":"US"},
+  {"course_symbol":"MSFT","yahoo_symbol":"MSFT","name":"Microsoft","market":"US"},
+  {"course_symbol":"PLTR","yahoo_symbol":"PLTR","name":"Palantir Technologies","market":"US"},
+  {"course_symbol":"CSCO","yahoo_symbol":"CSCO","name":"Cisco Systems","market":"US"},
+  {"course_symbol":"688256.SH","yahoo_symbol":"688256.SS","name":"寒武纪 / Cambricon","market":"CN"},
+  {"course_symbol":"601138.SH","yahoo_symbol":"601138.SS","name":"工业富联 / Foxconn Industrial Internet","market":"CN"},
+  {"course_symbol":"002230.SZ","yahoo_symbol":"002230.SZ","name":"科大讯飞 / iFLYTEK","market":"CN"},
+  {"course_symbol":"002415.SZ","yahoo_symbol":"002415.SZ","name":"海康威视 / Hikvision","market":"CN"},
+  {"course_symbol":"9984.T","yahoo_symbol":"9984.T","name":"SoftBank Group","market":"JP"},
+  {"course_symbol":"7203.T","yahoo_symbol":"7203.T","name":"Toyota","market":"JP"},
+  {"course_symbol":"005930.KS","yahoo_symbol":"005930.KS","name":"Samsung Electronics","market":"KR"},
+  {"course_symbol":"000660.KS","yahoo_symbol":"000660.KS","name":"SK Hynix","market":"KR"},
+  {"course_symbol":"2330.TW","yahoo_symbol":"2330.TW","name":"TSMC","market":"TW"},
+  {"course_symbol":"2317.TW","yahoo_symbol":"2317.TW","name":"Foxconn Technology / Hon Hai","market":"TW"}
+]

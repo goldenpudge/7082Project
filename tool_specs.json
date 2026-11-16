@@ -1,0 +1,40 @@
+[
+  {
+    "name": "get_price_history",
+    "description": "读取课程名单内公司的 Yahoo 日线及成交量。start 包含，end 不包含；返回摘要与可核验文件，不返回投资建议。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "symbol": {"type": "string", "minLength": 1, "maxLength": 16},
+        "start": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "end": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"}
+      },
+      "required": ["symbol", "start", "end"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "get_company_profile",
+    "description": "读取公司业务概况与当前估值快照。结果是当前抓取快照，不能当作指定历史日期时已知的信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {"symbol": {"type": "string", "minLength": 1, "maxLength": 16}},
+      "required": ["symbol"],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "get_financial_statements",
+    "description": "读取 Yahoo 年度或季度利润表、资产负债表、现金流量表。区分报表币种和报价币种；不推算未提供的披露日期、期间开始日或缺失指标。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "symbol": {"type": "string", "minLength": 1, "maxLength": 16},
+        "frequency": {"type": "string", "enum": ["annual", "quarterly"]},
+        "periods": {"type": "integer", "minimum": 1, "maximum": 8}
+      },
+      "required": ["symbol", "frequency", "periods"],
+      "additionalProperties": false
+    }
+  }
+]
