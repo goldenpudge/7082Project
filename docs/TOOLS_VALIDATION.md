@@ -40,8 +40,8 @@
 - SEC 10-K/10-Q 原文与 Seeking Alpha/IR 电话会全文尚未接入。
 - 未调用任何 LLM API；远程发布不属于本数据验证步骤。
 
-复验命令：`.venv/bin/python -m unittest -v test_market_data.py test_equity_tools.py`。
+复验命令：`.venv/bin/python -m unittest discover -s tests -t .`。
 
 ## 精简仓库说明
 
-本仓库保留 4 个核心 Python 文件、2 个测试文件、1 个教学 Notebook、2 个 JSON 规格/映射文件、2 份依赖清单、3 份说明和 .gitignore，共 15 个文件。完整交付包及其真实样例仍保留在本地。
+本仓库保留 `agent/` 与 `tools/` 两层的核心 Python 文件、2 个测试文件、1 个教学 Notebook、2 个 JSON 规格/映射文件、2 份依赖清单、3 份说明和 .gitignore。完整交付包及其真实样例仍保留在本地。

@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from market_data import COMPANIES, get_price, resolve_company, run_demo, summarize_prices
+from tools.market_data import COMPANIES, get_price, resolve_company, run_demo, summarize_prices
 
 
 def dividend_example():

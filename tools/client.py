@@ -15,7 +15,8 @@ import uuid
 from jsonschema import Draft202012Validator
 import pandas as pd
 
-from market_data import ROOT, resolve_company, summarize_prices
+from paths import ROOT
+from tools.market_data import resolve_company, summarize_prices
 
 SCHEMA_VERSION = "0.2"
 TOOL_SPECS = json.loads((ROOT / "tool_specs.json").read_text(encoding="utf-8"))
@@ -294,8 +295,14 @@ class ToolClient:
         try:
             info = self._info(symbol, ticker)
             currency = info.get("financialCurrency")
+            # Save only the currency fields here. The full profile already has its
+            # own evidence file; writing it again under this label duplicated the
+            # artifact byte for byte and left the label describing the wrong thing.
+            currency_evidence = {"symbol": symbol, "financialCurrency": currency,
+                                 "currency": info.get("currency")}
             currency_source = self._source(context, "financial_currency_info",
-                                           f"https://finance.yahoo.com/quote/{symbol}/financials/", info)
+                                           f"https://finance.yahoo.com/quote/{symbol}/financials/",
+                                           currency_evidence)
             sources.append(currency_source)
             currency_source["retrieved_at_utc"] = self._info_retrieved[symbol]
         except EvidenceStorageError:

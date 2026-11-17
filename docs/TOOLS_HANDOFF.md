@@ -60,7 +60,7 @@ Windows PowerShell：
 
 ```python
 import json
-from equity_tools import ToolClient, TOOL_SPECS
+from tools.client import ToolClient, TOOL_SPECS
 
 client = ToolClient(output_dir="outputs")
 result = client.call_tool(
@@ -151,7 +151,7 @@ Notebook 是可选教学入口。在 Jupyter 中选择已安装本依赖清单�
 ## 5. 验收与待办
 
 ```sh
-.venv/bin/python -m unittest -v test_market_data.py test_equity_tools.py
+.venv/bin/python -m unittest discover -s tests -t .
 ```
 
 离线检查覆盖：复权口径、日期边界、参数白名单、原始字段命名差异、零/缺失值、报表币种、CapEx 符号、期间排序、部分失败、来源哈希与保存失败。当前验收结果见 `TOOLS_VALIDATION.md`。

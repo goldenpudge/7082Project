@@ -9,8 +9,8 @@ from unittest.mock import Mock, patch
 
 import pandas as pd
 
-from demo_tools_provider import DemoTicker
-from equity_tools import ToolClient
+from tools.client import ToolClient
+from tools.demo_provider import DemoTicker
 
 
 class ToolTests(unittest.TestCase):
