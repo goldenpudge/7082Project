@@ -35,8 +35,9 @@
       },
       "required": ["symbol", "frequency", "periods"],
       "additionalProperties": false
-    }，
-    {
+    }
+  },
+  {
     "name": "get_sec_filings",
     "description": "读取公司最新的 SEC 10-K 与 10-Q 官方申报目录、精确披露日期、报告期及原文正文摘要，用于核验财报时间口径。",
     "parameters": {
@@ -49,6 +50,5 @@
       "required": ["symbol", "form_type", "limit"],
       "additionalProperties": false
     }
-  }
   }
 ]
