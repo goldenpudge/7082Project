@@ -157,6 +157,7 @@ class ToolClient:
                 "get_price_history": self._price,
                 "get_company_profile": self._profile,
                 "get_financial_statements": self._financials,
+                "get_sec_filings": self._sec_filings,
             }
             data, sources, warnings, partial = handlers[name](ticker, arguments, context)
             result.update(data=data, sources=sources, warnings=warnings,
@@ -368,7 +369,83 @@ class ToolClient:
         return {"frequency": args["frequency"], "requested_periods": args["periods"],
                 "financial_currency": currency, "historical_as_of_supported": False,
                 "statements": statements}, sources, warnings, partial
+    def _sec_filings(self, ticker, args, context):
+        import re
+        import urllib.request
 
+        symbol = context["company"]["yahoo_symbol"]
+        form_filter = args["form_type"]
+        limit = int(args["limit"])
+
+        raw_filings = getattr(ticker, "sec_filings", None)
+        if not raw_filings:
+            raise DataUnavailable(f"{symbol} 未返回 SEC 申报记录。")
+
+        target_forms = {"10-K", "10-Q"} if form_filter == "ALL" else {form_filter}
+        matched = [
+            f for f in raw_filings
+            if isinstance(f, dict) and f.get("type") in target_forms
+        ][:limit]
+
+        if not matched:
+            raise DataUnavailable(f"{symbol} 没有符合条件（{form_filter}）的 SEC 10-K/10-Q 申报记录。")
+
+        index_source = self._source(
+            context,
+            "sec_filings_index",
+            "https://www.sec.gov/edgar/searchedgar/companysearch",
+            matched,
+            parameters={"form_type": form_filter, "limit": limit},
+        )
+        sources = [index_source]
+        warnings = []
+        partial = False
+        filings_out = []
+
+        for idx, item in enumerate(matched):
+            exhibits = item.get("exhibits") or {}
+            doc_url = exhibits.get(item.get("type")) or item.get("edgarUrl")
+            excerpt = None
+            if idx == 0 and doc_url and doc_url.startswith("http"):
+                try:
+                    req = urllib.request.Request(
+                        doc_url,
+                        headers={"User-Agent": "HKU-ELEC7082-ResearchAgent student@connect.hku.hk"},
+                    )
+                    with urllib.request.urlopen(req, timeout=15) as resp:
+                        html_bytes = resp.read(300_000)
+                    raw_html = html_bytes.decode("utf-8", errors="ignore")
+                    clean_text = re.sub(r"<[^>]+>", " ", raw_html)
+                    clean_text = re.sub(r"\s+", " ", clean_text).strip()
+                    excerpt = clean_text[:6000]
+
+                    doc_source = self._source(
+                        context,
+                        f"sec_{item.get('type')}_excerpt",
+                        doc_url,
+                        {"url": doc_url, "filing_date": str(item.get("date")), "excerpt": excerpt},
+                    )
+                    sources.append(doc_source)
+                except Exception:
+                    partial = True
+                    warnings.append(f"最新 {item.get('type')} 原文正文抓取失败，仅保留申报元数据与链接。")
+
+            filings_out.append({
+                "form_type": item.get("type"),
+                "filing_date": str(item.get("date")) if item.get("date") else None,
+                "report_date": str(item.get("reportDate")) if item.get("reportDate") else None,
+                "title": item.get("title"),
+                "edgar_url": doc_url,
+                "text_excerpt": excerpt,
+                "source_id": index_source["source_id"],
+            })
+
+        data = {
+            "symbol": context["company"]["course_symbol"],
+            "form_filter": form_filter,
+            "filings": filings_out,
+        }
+        return data, sources, warnings, partial
 
 if __name__ == "__main__":
     print(json.dumps(TOOL_SPECS, ensure_ascii=False, indent=2))
